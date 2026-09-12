@@ -1,0 +1,12 @@
+{
+  "name": "zhelezny-dnevnik",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Дневник силовых тренировок и питания по персональной 9-недельной программе",
+  "scripts": {
+    "build": "node build.mjs",
+    "check": "node build.mjs --check",
+    "test": "node test/merge.test.mjs && node test/progression.test.mjs"
+  }
+}

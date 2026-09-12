@@ -1,0 +1,79 @@
+/* ---------- training ---------- */
+.daypick{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.daybtn{
+  border:1px solid var(--line-2);background:var(--surface);border-radius:8px;
+  padding:7px 12px;font-size:13px;font-weight:600;display:flex;gap:7px;align-items:center;
+}
+.daybtn .k{font-size:11px;color:var(--ink-3);font-weight:700;letter-spacing:.06em}
+.daybtn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.daybtn[aria-pressed="true"] .k{color:var(--bg);opacity:.6}
+
+.exlist{display:flex;flex-direction:column;gap:10px}
+.ex{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.ex.done{border-color:var(--good)}
+.exhead{display:flex;align-items:flex-start;gap:12px;padding:12px 14px}
+.exhead .idx{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:var(--ink-3);
+  padding-top:3px;min-width:16px;
+}
+.exname{flex:1;min-width:0}
+.exname .n{font-weight:700;font-size:15px;letter-spacing:-.01em;line-height:1.25}
+.exname .p{font-size:12px;color:var(--ink-3);margin-top:2px;font-family:'IBM Plex Mono',monospace}
+.exname .p .g{color:var(--ink-2)}
+.target{
+  font-size:12px;font-weight:600;padding:3px 8px;border-radius:6px;white-space:nowrap;
+  background:var(--accent-soft);color:var(--accent-ink);
+}
+.target.up{background:var(--good-soft);color:var(--good)}
+.sets{padding:0 14px 12px;display:flex;flex-direction:column;gap:6px;max-width:392px}
+.setrow{display:grid;grid-template-columns:20px 1fr 14px 1fr 56px 30px;gap:6px;align-items:center}
+.setrow .sn{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-3);font-weight:600}
+.setrow .x{text-align:center;color:var(--ink-3);font-size:12px}
+.inp{
+  width:100%;border:1px solid var(--line-2);background:var(--surface-2);border-radius:7px;
+  padding:8px 6px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;
+  -moz-appearance:textfield;
+}
+.inp::-webkit-outer-spin-button,.inp::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.inp::placeholder{color:var(--ink-3);font-weight:400;opacity:1}
+.inp:focus{border-color:var(--accent);background:var(--surface)}
+.inp.filled{background:var(--surface);border-color:var(--line)}
+.inp.pr{border-color:var(--rec);background:var(--rec-soft)}
+.rpesel{
+  width:100%;border:1px solid var(--line-2);background:var(--surface-2);border-radius:7px;
+  padding:8px 2px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;
+}
+.setrow .del{border:0;background:none;color:var(--ink-3);font-size:17px;line-height:1;padding:4px}
+.setrow .del:hover{color:var(--rec)}
+.exfoot{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:0 14px 12px}
+.notein{
+  flex:1;min-width:140px;border:1px solid transparent;background:var(--surface-2);border-radius:7px;
+  padding:7px 10px;font-size:13px;
+}
+.notein:focus{border-color:var(--accent);background:var(--surface)}
+.plates{display:flex;gap:3px;align-items:center;padding:2px 14px 12px;flex-wrap:wrap}
+.plate{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;
+  padding:2px 6px;border-radius:4px;color:#0d1015;border:1px solid rgba(0,0,0,.18);
+}
+.plates .lab{font-size:11px;color:var(--ink-3);margin-right:2px}
+
+.lastline{padding:0 14px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-3)}
+.lastline b{color:var(--ink-2);font-weight:600}
+
+/* rest timer */
+.resttimer{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:60;
+  background:var(--ink);color:var(--bg);border-radius:999px;padding:9px 10px 9px 18px;
+  display:none;align-items:center;gap:12px;box-shadow:0 10px 30px -8px rgba(0,0,0,.5);
+}
+.resttimer.on{display:flex}
+.resttimer .t{font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:600;letter-spacing:-.02em}
+.resttimer .lb{font-size:11px;text-transform:uppercase;letter-spacing:.08em;opacity:.6;font-weight:700}
+.resttimer button{border:0;background:rgba(255,255,255,.15);color:inherit;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:600}
+.resttimer button:hover{background:rgba(255,255,255,.28)}
+
+.finishbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:16px}
+.summary{display:flex;gap:18px;flex-wrap:wrap;margin-right:auto}
+.summary div{font-size:12px;color:var(--ink-3)}
+.summary b{display:block;font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:600;color:var(--ink);letter-spacing:-.02em}

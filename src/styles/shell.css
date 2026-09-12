@@ -1,0 +1,33 @@
+/* ---------- shell ---------- */
+.wrap{max-width:940px;margin:0 auto;padding-inline:16px;padding-block:0 96px}
+header.top{
+  position:sticky;top:0;z-index:40;background:var(--bg);
+  border-bottom:1px solid var(--line);
+}
+.top-in{max-width:940px;margin:0 auto;padding:14px 16px 0}
+.brandrow{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;justify-content:space-between}
+.brand{display:flex;align-items:baseline;gap:10px;min-width:0}
+.brand h1{
+  margin:0;font-size:19px;font-weight:800;letter-spacing:-.02em;
+}
+.brand .sub{font-size:12px;color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.topmeta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 9px;border-radius:999px;border:1px solid var(--line-2);
+  background:var(--surface);font-size:12px;font-weight:600;white-space:nowrap;
+}
+.chip b{font-weight:700}
+.chip.on{background:var(--accent-soft);border-color:transparent;color:var(--accent-ink)}
+.chip.rec{background:var(--rec-soft);border-color:transparent;color:var(--rec)}
+.dots{display:inline-flex;gap:3px;margin-left:2px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--line-2)}
+.dot.f{background:var(--accent)}
+.tabs{display:flex;gap:2px;margin-top:12px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  background:none;border:0;padding:9px 13px 11px;font-size:14px;font-weight:600;
+  color:var(--ink-3);border-bottom:2px solid transparent;white-space:nowrap;
+}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab:hover{color:var(--ink-2)}

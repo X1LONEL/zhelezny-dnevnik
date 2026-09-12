@@ -1,0 +1,73 @@
+  <!-- ================= PROGRESS ================= -->
+  <div class="panel" id="p-prog" role="tabpanel" aria-labelledby="tab-prog">
+    <section>
+      <h2 class="sec">Сводка</h2>
+      <div class="kpis" id="kpis"></div>
+    </section>
+
+    <section>
+      <h2 class="sec">Прогресс по упражнению</h2>
+      <div class="chartbox">
+        <div class="row" style="margin-bottom:10px">
+          <select class="exsel" id="exSel"></select>
+          <span class="tiny" id="exSelNote"></span>
+        </div>
+        <div class="legend">
+          <span><i style="background:var(--accent)"></i>Рабочий вес, кг</span>
+          <span><i style="background:var(--series-2)"></i>Расчётный 1ПМ, кг</span>
+        </div>
+        <div id="exChart"></div>
+        <div id="exRecent"></div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec">Личные рекорды</h2>
+      <div id="prList"></div>
+    </section>
+
+    <section>
+      <h2 class="sec">Объём и частота</h2>
+      <div class="grid2">
+        <div class="chartbox">
+          <h3>Тоннаж по неделям</h3>
+          <div class="cs">Сумма вес × повторы за неделю · <span style="color:var(--accent)">■</span> 3 тренировки <span style="color:var(--warn)">■</span> меньше нормы</div>
+          <div id="volChart"></div>
+        </div>
+        <div class="chartbox">
+          <h3>Подходы по группам мышц</h3>
+          <div class="cs" id="mgNote">За последние 4 недели</div>
+          <div id="mgChart" class="bars"></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec">Регулярность</h2>
+      <div class="chartbox">
+        <h3>Календарь тренировок</h3>
+        <div class="cs" id="hmNote"></div>
+        <div class="row" style="align-items:flex-start;gap:0">
+          <div class="hmlabels"><span>пн</span><span></span><span>ср</span><span></span><span>пт</span><span></span><span>вс</span></div>
+          <div class="hm" id="hmGrid"></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec">Вес тела и замеры</h2>
+      <div class="chartbox">
+        <h3>Динамика веса</h3>
+        <div class="cs">Программа: взвешиваться 3–4 раза в неделю утром натощак, сравнивать средние за неделю</div>
+        <div id="bwChart"></div>
+        <div class="bodyform">
+          <input id="bwDate" type="date" style="width:140px">
+          <input id="bwKg" type="number" step="0.1" placeholder="кг" inputmode="decimal">
+          <input id="bwWaist" type="number" step="0.5" placeholder="талия" inputmode="decimal">
+          <input id="bwArm" type="number" step="0.5" placeholder="рука" inputmode="decimal">
+          <button class="btn sm" id="bwAdd">Записать</button>
+        </div>
+        <div class="advice" id="bwAdvice"></div>
+      </div>
+    </section>
+  </div>

@@ -1,0 +1,75 @@
+  <!-- ================= PLAN ================= -->
+  <div class="panel" id="p-plan" role="tabpanel" aria-labelledby="tab-plan">
+    <section>
+      <h2 class="sec">Структура цикла</h2>
+      <div class="card pad">
+        <table class="ptable">
+          <thead><tr><th>Недели</th><th>Блок</th><th>Что делаем</th></tr></thead>
+          <tbody>
+            <tr><td class="num">1–4</td><td>Full Body · A / B / C</td><td>Каждая мышца 3 раза в неделю. Неделя 1 — на подход меньше, RPE 5–6. Неделя 2 — по таблице, RPE 6–7. Недели 3–4 — рабочий режим.</td></tr>
+            <tr><td class="num">5–8</td><td>Верх / Низ / Фулбоди</td><td>Каждая мышца 2 раза в неделю, больше весов. Недели 7–8 — плюс один подход к первым двум упражнениям дня.</td></tr>
+            <tr><td class="num">9</td><td>Разгрузка</td><td>Те же упражнения, подходов вдвое меньше, веса на 10% ниже, RPE 5–6.</td></tr>
+            <tr><td class="num">10+</td><td>Новый цикл</td><td>Повторить блок 2 со стартом от весов 6–7 недели.</td></tr>
+          </tbody>
+        </table>
+        <div class="notebox"><b>Старт цикла:</b> <input id="startDate" type="date" style="border:1px solid var(--line-2);background:var(--surface);border-radius:6px;padding:4px 8px;font-family:'IBM Plex Mono',monospace"> — от этой даты считается текущая неделя.</div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec">Дни и упражнения</h2>
+      <div id="planDays"></div>
+    </section>
+
+    <section>
+      <h2 class="sec">Прогрессия и стартовые веса</h2>
+      <div class="card pad">
+        <div class="notebox" style="margin-top:0"><b>Двойная прогрессия.</b> Сначала добавляй повторения внутри диапазона. Когда во всех подходах достигнут верх диапазона — добавь вес: +2.5–5 кг в базовых, +1–2 кг или минимальный шаг гантелей в изоляции. Если две тренировки подряд не выходит на целевые повторы — оставь вес ещё на неделю.</div>
+        <table class="ptable" style="margin-top:14px">
+          <thead><tr><th>Упражнение</th><th>До перерыва</th><th>Старт</th></tr></thead>
+          <tbody>
+            <tr><td>Жим штанги лёжа</td><td class="num dim">80 кг</td><td class="num">40–50 кг</td></tr>
+            <tr><td>Присед со штангой</td><td class="num dim">66 кг</td><td class="num">30–40 кг</td></tr>
+            <tr><td>Румынская тяга</td><td class="num dim">66 кг</td><td class="num">30–40 кг</td></tr>
+            <tr><td>Тяга штанги в наклоне</td><td class="num dim">—</td><td class="num">30–35 кг</td></tr>
+            <tr><td>Остальное</td><td class="num dim">—</td><td class="num">по RPE 5–6</td></tr>
+          </tbody>
+        </table>
+        <div class="notebox"><b>Ноги в приоритете.</b> Жим до перерыва был 80 кг, присед всего 66 — ноги отстают. Добавляй вес в приседе и тягах при каждой возможности.</div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec">Шкала RPE</h2>
+      <div class="card pad">
+        <table class="ptable">
+          <thead><tr><th>RPE</th><th>Повторений в запасе</th><th>Где применяется</th></tr></thead>
+          <tbody>
+            <tr><td class="num">10</td><td>0 — отказ</td><td class="muted">В программе не используется</td></tr>
+            <tr><td class="num">9</td><td>1</td><td>Изоляция в конце цикла</td></tr>
+            <tr><td class="num">8</td><td>2</td><td>Изоляция, база во 2-м блоке</td></tr>
+            <tr><td class="num">7</td><td>3</td><td>Рабочая тяжесть базовых для набора массы</td></tr>
+            <tr><td class="num">5–6</td><td>4+</td><td>Разминка, первая неделя, разгрузка</td></tr>
+          </tbody>
+        </table>
+        <div class="notebox">В приседе и становой держись RPE 7–8: техника важнее. В изоляции (махи, бицепс, икры) можно ближе к отказу — риск травмы там низкий.</div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec">Разминка, отдых, восстановление</h2>
+      <div class="card pad">
+        <table class="ptable">
+          <thead><tr><th></th><th>Базовые</th><th>Изоляция</th></tr></thead>
+          <tbody>
+            <tr><td>Отдых между подходами, блок 1</td><td class="num">90–120 сек</td><td class="num">60 сек</td></tr>
+            <tr><td>Отдых между подходами, блок 2</td><td class="num">2–3 мин</td><td class="num">60–90 сек</td></tr>
+          </tbody>
+        </table>
+        <div class="notebox" style="margin-top:14px"><b>Разминка 10–15 мин:</b> 5 мин лёгкого кардио, суставная разминка, затем разминочные подходы к каждому базовому упражнению — 50% × 10, потом 70% × 5. Во 2-м блоке, когда рабочие подходы на RPE 8, добавь ещё 85% × 2.</div>
+        <div class="notebox"><b>Заминка 5–10 мин:</b> растяжка задействованных мышц, статические позы по 30 сек.</div>
+        <div class="notebox"><b>Сон 7–9 часов,</b> ложиться и вставать примерно в одно время. Мышцы растут во время восстановления. Тренируешься вечером — кофе и предтреники не позже чем за 6 часов до сна.</div>
+        <div class="notebox"><b>Расписание:</b> 3 тренировки в неделю через день, например пн / ср / пт вечером, минимум 1 день отдыха между ними.</div>
+      </div>
+    </section>
+  </div>

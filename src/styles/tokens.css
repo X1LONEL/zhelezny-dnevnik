@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  color-scheme: light;
+  --bg:#f2f4f7;
+  --surface:#ffffff;
+  --surface-2:#e9ecf1;
+  --surface-3:#dfe3ea;
+  --ink:#131720;
+  --ink-2:#525c6b;
+  --ink-3:#828c9c;
+  --line:#d8dde5;
+  --line-2:#c3cad5;
+  --accent:#2a5fb5;
+  --accent-ink:#22508f;
+  --accent-soft:#e4ebf8;
+  --series-2:#eb6834;
+  --rec:#c8322c;
+  --rec-soft:#fbe8e6;
+  --good:#1b7a4e;
+  --good-soft:#e0f2e8;
+  --warn:#a86400;
+  --warn-soft:#fbeed6;
+  --shadow:0 1px 2px rgba(19,23,32,.06), 0 6px 18px -10px rgba(19,23,32,.18);
+  --r:10px;
+  --plate-chrome:#b9c0c9;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --bg:#0e1116;
+    --surface:#171b22;
+    --surface-2:#1e242d;
+    --surface-3:#262d38;
+    --ink:#eef1f6;
+    --ink-2:#9ba5b4;
+    --ink-3:#6c7686;
+    --line:#282f3a;
+    --line-2:#38414f;
+    --accent:#5a8fe0;
+    --accent-ink:#8fb4ec;
+    --accent-soft:#1a2739;
+    --series-2:#d95926;
+    --rec:#ef6a5f;
+    --rec-soft:#2e1a19;
+    --good:#3fa877;
+    --good-soft:#13241d;
+    --warn:#d99a2b;
+    --warn-soft:#2a2113;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+    --plate-chrome:#767f8c;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:#0e1116;
+  --surface:#171b22;
+  --surface-2:#1e242d;
+  --surface-3:#262d38;
+  --ink:#eef1f6;
+  --ink-2:#9ba5b4;
+  --ink-3:#6c7686;
+  --line:#282f3a;
+  --line-2:#38414f;
+  --accent:#5a8fe0;
+  --accent-ink:#8fb4ec;
+  --accent-soft:#1a2739;
+  --series-2:#d95926;
+  --rec:#ef6a5f;
+  --rec-soft:#2e1a19;
+  --good:#3fa877;
+  --good-soft:#13241d;
+  --warn:#d99a2b;
+  --warn-soft:#2a2113;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  --plate-chrome:#767f8c;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'Archivo','Helvetica Neue',Arial,sans-serif;
+  font-size:15px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;cursor:pointer}
+input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion: reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}

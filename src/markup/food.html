@@ -1,0 +1,134 @@
+  <!-- ================= FOOD ================= -->
+  <div class="panel" id="p-food" role="tabpanel" aria-labelledby="tab-food">
+    <section>
+      <h2 class="sec">Дневник питания</h2>
+      <div class="daynav">
+        <button class="navb" id="fdPrev" aria-label="Предыдущий день">‹</button>
+        <div class="cur" id="fdLabel">Сегодня<span></span></div>
+        <button class="navb" id="fdNext" aria-label="Следующий день">›</button>
+        <button class="btn sm" id="fdToday">Сегодня</button>
+        <button class="btn sm ghost" id="fdFill">Заполнить по плану</button>
+      </div>
+      <div class="meters" id="fdMeters"></div>
+      <div class="meallist" id="fdMeals"></div>
+      <div class="extras" id="fdExtras"></div>
+      <div class="custom">
+        <input class="nm" id="cuName" placeholder="Своё блюдо или продукт">
+        <input class="num" id="cuKcal" type="number" inputmode="numeric" placeholder="ккал">
+        <input class="num" id="cuP" type="number" inputmode="decimal" placeholder="Б">
+        <input class="num" id="cuF" type="number" inputmode="decimal" placeholder="Ж">
+        <input class="num" id="cuC" type="number" inputmode="decimal" placeholder="У">
+        <button class="btn sm" id="cuAdd">Добавить</button>
+      </div>
+      <div id="fdAdded"></div>
+      <div class="notebox" id="fdHint"></div>
+    </section>
+
+    <section>
+      <h2 class="sec">Калории и вес</h2>
+      <div class="grid2">
+        <div class="chartbox">
+          <h3>Средние калории за неделю</h3>
+          <div class="cs" id="calNote">Цель 3000 ккал/день · <span style="color:var(--good)">■</span> в норме <span style="color:var(--warn)">■</span> мимо</div>
+          <div id="calChart"></div>
+        </div>
+        <div class="chartbox">
+          <h3>Средний вес за неделю</h3>
+          <div class="cs">Та же шкала недель — видно, отвечает ли вес на калории</div>
+          <div id="wkWeightChart"></div>
+        </div>
+      </div>
+      <div class="advice" id="calAdvice"></div>
+    </section>
+
+    <section>
+      <h2 class="sec">Ориентиры дня</h2>
+      <div class="card pad">
+        <div class="macros">
+          <div class="macro"><div class="l">Калории</div><div class="v">3000</div><div class="s">ккал/день</div></div>
+          <div class="macro"><div class="l">Белки</div><div class="v">140–150</div><div class="s">г · ~580 ккал · 20%</div></div>
+          <div class="macro"><div class="l">Жиры</div><div class="v">80–85</div><div class="s">г · ~740 ккал · 25%</div></div>
+          <div class="macro"><div class="l">Углеводы</div><div class="v">410–420</div><div class="s">г · ~1660 ккал · 55%</div></div>
+        </div>
+        <table class="ptable" style="margin-top:14px">
+          <tbody>
+            <tr><td>Базовый обмен (BMR)</td><td class="num">~1640 ккал</td></tr>
+            <tr><td>Поддержание с учётом активности</td><td class="num">~2550 ккал</td></tr>
+            <tr><td>Профицит для набора массы</td><td class="num">+450 ккал</td></tr>
+            <tr><td><b>Целевая калорийность</b></td><td class="num"><b>~3000 ккал/день</b></td></tr>
+          </tbody>
+        </table>
+        <div class="notebox">Белок ~2.3 г/кг — с запасом хватает для роста. Больше не ускорит набор, только вытеснит углеводы и уменьшит аппетит. Углеводы — основной источник энергии и главный рычаг калорийности. Жиры не занижать: они важны для гормонального фона.</div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec">Меню на день</h2>
+      <div class="card pad">
+        <div class="tscroll">
+        <table class="ptable">
+          <thead><tr><th>Приём</th><th>Что съесть</th><th>Б</th><th>Ж</th><th>У</th><th>Ккал</th></tr></thead>
+          <tbody id="menuTable"></tbody>
+        </table>
+        </div>
+        <div class="notebox"><b>Вес указан в сыром и сухом виде.</b> При варке рис и гречка прибавляют в весе примерно в 3 раза, паста — в 2.5 раза; мясо при готовке теряет 25–30%. Проще всего взвешивать до готовки.</div>
+        <div class="notebox"><b>В дни отдыха ешь так же</b> — предтренировочный перекус становится дневным. Мышцы растут как раз в дни восстановления.</div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec">Замены и добор калорий</h2>
+      <div class="grid2">
+        <div class="card pad">
+          <table class="ptable">
+            <thead><tr><th>Ситуация</th><th>Что делать</th></tr></thead>
+            <tbody>
+              <tr><td>Говядина или лосось вместо курицы</td><td>Они жирнее — в такие дни не добавляй масло в гарнир или салат</td></tr>
+              <tr><td>Гречка ↔ рис, паста ↔ картофель</td><td>Калорийность почти та же, меняй свободно</td></tr>
+              <tr><td>Пропустил приём с мясом</td><td>Закрой белок творогом или порцией протеина</td></tr>
+              <tr><td>Еда не лезет</td><td>Гейнер-шейк ~620 ккал: молоко 400 мл + овсянка 50 г + банан + арахисовая паста 20 г</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card pad">
+          <table class="ptable">
+            <thead><tr><th>Как добавить калории без лишней еды</th><th></th></tr></thead>
+            <tbody>
+              <tr><td>+10 г оливкового масла в гарнир</td><td class="num">+90 ккал</td></tr>
+              <tr><td>+30 г сухой крупы или пасты</td><td class="num">+100 ккал</td></tr>
+              <tr><td>Гейнер-шейк вместо перекуса</td><td class="num">+620 ккал</td></tr>
+            </tbody>
+          </table>
+          <div class="notebox">Ешь по расписанию, а не по чувству голода: при наборе аппетит часто отстаёт от потребностей. Не пей много воды прямо перед едой — она занимает место в желудке. Вода: 2.5–3 л в день, особенно в тренировочные дни.</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec">Добавки</h2>
+      <div class="card pad">
+        <div class="tscroll">
+        <table class="ptable">
+          <thead><tr><th>Добавка</th><th>Как принимать</th><th>Комментарий</th></tr></thead>
+          <tbody>
+            <tr><td>Креатин моногидрат</td><td class="num">3–5 г в день, ежедневно</td><td>Самая изученная добавка для силы и массы. Загрузка не нужна. В первые недели +1–2 кг веса за счёт воды в мышцах — это нормально</td></tr>
+            <tr><td>Сывороточный протеин</td><td class="num">25–30 г по необходимости</td><td>Не обязателен — просто удобен, когда не успел поесть</td></tr>
+            <tr><td>BCAA, «бустеры», жиросжигатели</td><td class="num">—</td><td class="muted">При нормальном питании эффекта не дают — не трать деньги</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec">План закупок</h2>
+      <div class="card pad">
+        <div style="font-weight:700;font-size:14px;margin-bottom:8px">Раз в месяц <span class="tiny" style="font-weight:400">· под меню ~3000 ккал на 30 дней</span></div>
+        <div class="shoplist" id="shopMonth"></div>
+        <div style="font-weight:700;font-size:14px;margin:18px 0 8px">Раз в неделю <span class="tiny" style="font-weight:400">· свежее</span></div>
+        <div class="shoplist" id="shopWeek"></div>
+        <div class="notebox"><b>Мясо и рыбу</b> сразу после покупки раздели на порции по 120–130 г и заморозь. Крупы храни в закрытых контейнерах, картофель — в тёмном прохладном месте. Готовь крупными партиями 2 раза в неделю: мультиварка — гарниры и тушёное мясо, аэрогриль — курица, рыба, индейка. Сразу раскладывай по контейнерам.</div>
+        <div class="notebox">Итого мясо и рыба за месяц: ~7.5–8 кг (обед 120 г + ужин 130 г = 250 г в день × 30). Если со временем добавляешь калории — увеличивай в первую очередь крупы и пасту.</div>
+      </div>
+    </section>
+  </div>

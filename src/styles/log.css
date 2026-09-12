@@ -1,0 +1,13 @@
+/* ---------- log ---------- */
+.logitem{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.logitem summary{padding:12px 14px;display:flex;gap:12px;align-items:baseline;cursor:pointer;list-style:none}
+.logitem summary::-webkit-details-marker{display:none}
+.logitem summary .d{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;min-width:52px}
+.logitem summary .nm{font-weight:700;flex:1;min-width:0}
+.logitem summary .v{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-3)}
+.logitem .body{padding:0 14px 14px;border-top:1px solid var(--line)}
+.logtable{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
+.logtable th{text-align:left;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:4px 6px;font-weight:700}
+.logtable td{padding:5px 6px;border-top:1px solid var(--line);font-family:'IBM Plex Mono',monospace}
+.logtable td:first-child{font-family:'Archivo',sans-serif;font-weight:600}
+.logtable .np{color:var(--ink-3)}

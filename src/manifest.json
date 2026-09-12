@@ -1,0 +1,41 @@
+{
+  "title": "Железный дневник",
+  "styles": [
+    "tokens.css",
+    "base.css",
+    "shell.css",
+    "training.css",
+    "log.css",
+    "progress.css",
+    "nutrition.css",
+    "program.css",
+    "responsive.css"
+  ],
+  "markup": [
+    "header.html",
+    "_wrap-open.html",
+    "train.html",
+    "log.html",
+    "progress.html",
+    "food.html",
+    "program.html",
+    "_wrap-close.html",
+    "overlays.html"
+  ],
+  "scripts": [
+    "data/program.js",
+    "data/nutrition.js",
+    "core/state.js",
+    "core/dates.js",
+    "core/calc.js",
+    "core/history.js",
+    "ui/charts.js",
+    "ui/train.js",
+    "ui/log.js",
+    "ui/progress.js",
+    "ui/nutrition.js",
+    "ui/program.js",
+    "ui/shell.js",
+    "boot.js"
+  ]
+}
