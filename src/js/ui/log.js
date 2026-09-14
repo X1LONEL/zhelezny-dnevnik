@@ -50,16 +50,50 @@ function exportCsv(){
     rows.push([wo.date, DAYS[wo.day]?DAYS[wo.day].label:wo.day, wo.week, (EX[en.e]||{n:en.e}).n, i+1, s.w, s.r, s.rpe==null?"":s.rpe, (en.note||"").replace(/[;\n]/g," ")]);
   })));
   const csv = "﻿" + rows.map(r => r.join(";")).join("\n");
-  saveFile("dnevnik-trenirovok.csv", csv);
+  saveFile("dnevnik-trenirovok.csv", csv, "text/csv");
 }
-async function saveFile(filename, text){
+
+/* ------------------------------------------------------------
+   Резервная копия целиком. CSV — это выгрузка для таблиц: в нём нет
+   ни питания, ни веса тела, и обратно он не читается. Для переноса
+   между устройствами и между версиями приложения нужен весь стейт.
+   ------------------------------------------------------------ */
+const BACKUP_V = 1;
+function exportBackup(){
+  const data = {app:"zhelezny-dnevnik", v:BACKUP_V, saved:new Date().toISOString(),
+                settings:S.settings, workouts:S.workouts, body:S.body, nut:S.nut};
+  saveFile("zhelezny-dnevnik-" + iso(today()) + ".json", JSON.stringify(data), "application/json");
+}
+
+function importBackup(text){
+  let inc;
+  try{ inc = JSON.parse(text); }
+  catch(e){ toast("Это не файл резервной копии"); return; }
+  if(!inc || (inc.app && inc.app !== "zhelezny-dnevnik")){ toast("Файл из другого приложения"); return; }
+  const m = mergeBackup(S, inc);
+  const n = m.added.workouts + m.added.body + m.added.nutDays;
+  if(!n){ toast("В копии нет ничего нового"); return; }
+  S.settings = m.settings; S.workouts = m.workouts; S.body = m.body; S.nut = m.nut;
+  lsSave();
+  // в облако уйдёт само: onSnapshot до-зальёт записи, которых там нет
+  if(DB){
+    S.workouts.forEach(w => { try{ DB.collection("workouts").doc(w.id).set(w); }catch(e){} });
+    try{ DB.doc("meta/body").set({entries:S.body.entries}); }catch(e){}
+    Object.keys(S.nut).forEach(mk => { try{ DB.collection("nutrition").doc(mk).set({days:S.nut[mk]}); }catch(e){} });
+  }
+  renderAll();
+  toast("Добавлено: " + m.added.workouts + " трен., " + m.added.body + " взвеш., " + m.added.nutDays + " дн. питания");
+}
+
+async function saveFile(filename, text, mime){
   try{
     const dl = await window.claude.use("downloads");
     if(dl){ await dl.save({filename, data:text}); return; }
   }catch(e){}
   try{
-    const url = URL.createObjectURL(new Blob([text], {type:"text/csv;charset=utf-8"}));
-    const a = document.createElement("a"); a.href = url; a.download = filename; a.click();
+    const url = URL.createObjectURL(new Blob([text], {type:(mime||"text/plain")+";charset=utf-8"}));
+    const a = document.createElement("a"); a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
     setTimeout(()=>URL.revokeObjectURL(url), 2000);
   }catch(e){ toast("Не удалось выгрузить файл"); }
 }

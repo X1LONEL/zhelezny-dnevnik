@@ -8,6 +8,17 @@ document.getElementById("btnClear").onclick = ()=>{
   S.draft = null; queueDraftSave(); renderTrain();
 };
 document.getElementById("btnExport").onclick = exportCsv;
+document.getElementById("btnBackup").onclick = exportBackup;
+document.getElementById("btnRestore").onclick = ()=> document.getElementById("restoreFile").click();
+document.getElementById("restoreFile").onchange = e => {
+  const f = e.target.files && e.target.files[0];
+  e.target.value = "";            // иначе тот же файл второй раз не выберется
+  if(!f) return;
+  const r = new FileReader();
+  r.onload = ()=> importBackup(String(r.result));
+  r.onerror = ()=> toast("Не удалось прочитать файл");
+  r.readAsText(f);
+};
 document.getElementById("restPlus").onclick = ()=>{ restLeft += 30; paintRest(); };
 document.getElementById("restStop").onclick = stopRest;
 document.getElementById("startDate").onchange = e => {
@@ -69,6 +80,15 @@ function seedDefaults(){
   document.getElementById("bwDate").value = iso(today());
 }
 
+// Установленному приложению облака нет, и localStorage — единственный
+// источник правды. Просим браузер не вычищать его при нехватке места:
+// без этого iOS вправе снести хранилище вместе со всей историей.
+function askPersistence(){
+  try{
+    if(navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(()=>{});
+  }catch(e){}
+}
+
 (function boot(){
   const cached = lsLoad();
   if(cached){
@@ -79,6 +99,7 @@ function seedDefaults(){
     S.draft = cached.draft || null;
   }
   seedDefaults();
+  askPersistence();
   renderAll();
   document.getElementById("saveState").textContent = "сохранено локально";
 

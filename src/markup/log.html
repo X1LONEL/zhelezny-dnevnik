@@ -8,4 +8,16 @@
         <span class="tiny" id="logCount"></span>
       </div>
     </section>
+
+    <section>
+      <h2 class="sec">Резервная копия</h2>
+      <div class="card pad">
+        <div class="row">
+          <button class="btn sm" id="btnBackup">Сохранить копию</button>
+          <button class="btn sm ghost" id="btnRestore">Восстановить из файла</button>
+          <input type="file" id="restoreFile" accept="application/json,.json" hidden>
+        </div>
+        <div class="notebox">Копия — это весь дневник одним файлом: тренировки, вес тела и питание. CSV выше годится для таблиц, но обратно не читается и питания в нём нет. Восстановление <b>добавляет недостающее и никогда не затирает</b> то, что уже записано, — старый файл безопасно открыть поверх свежих тренировок.</div>
+      </div>
+    </section>
   </div>

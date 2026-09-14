@@ -1,0 +1,50 @@
+# Публикация устанавливаемого приложения на GitHub Pages.
+#
+# Собирается из src/ прямо здесь: dist/ лежит в .gitignore и в
+# репозитории его нет намеренно — иначе каждая правка давала бы
+# конфликт в собранном файле на 130 КБ.
+name: pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Токену нужны права на публикацию Pages; на репозиторий он их не даёт.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Параллельные деплои друг друга не отменяют: пусть доедет начатый.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          # npm ci не нужен: зависимостей у проекта нет
+      - name: Проверки
+        run: npm test
+      - name: Сборка
+        run: npm run build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/pwa
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

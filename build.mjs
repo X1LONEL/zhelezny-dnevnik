@@ -20,11 +20,14 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { icons, ICON_BG } from "./src/icon.mjs";
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const SRC = path.join(ROOT, "src");
 const DIST = path.join(ROOT, "dist");
+const PWA = path.join(DIST, "pwa");
 
 const read = (...p) => fs.readFileSync(path.join(...p), "utf8");
 const manifest = JSON.parse(read(SRC, "manifest.json"));
@@ -88,8 +91,155 @@ ${bundle}</body>
 `;
 fs.writeFileSync(path.join(DIST, "index.html"), preview);
 
+/* ============================================================
+   Второй выход: устанавливаемое приложение (PWA)
+   ============================================================
+
+   То же приложение, но на своём origin по HTTPS. Артефакт установить
+   на телефон нельзя: он живёт в песочнице внутри claude.ai, своим
+   <head> не управляет, а service worker регистрируется только с
+   файла на собственном origin.
+
+   Все пути относительные («./»), чтобы сборка одинаково работала и в
+   корне домена, и в подпапке вида user.github.io/<репозиторий>/.
+   ============================================================ */
+
+// Версия кэша = отпечаток сборки: не поменялся код — телефон не
+// перекачивает страницу; поменялся — старый кэш сносится целиком.
+const BUILD = crypto.createHash("sha256").update(bundle).digest("hex").slice(0, 12);
+
+const APP_ICONS = icons();
+
+const webmanifest = {
+  name: manifest.title,
+  short_name: "Дневник",
+  description: "Дневник силовых тренировок и питания по 9-недельной программе",
+  lang: "ru",
+  start_url: "./",
+  scope: "./",
+  display: "standalone",
+  orientation: "portrait",
+  background_color: "#f2f4f7",
+  theme_color: ICON_BG,
+  icons: [
+    { src: "./icon-192.png", sizes: "192x192", type: "image/png" },
+    { src: "./icon-512.png", sizes: "512x512", type: "image/png" },
+    { src: "./icon-maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+  ],
+};
+
+const pwaHead =`<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Дневник силовых тренировок и питания по 9-недельной программе">
+<link rel="manifest" href="./manifest.webmanifest">
+<!-- iOS читает манифест только после установки, а иконку и режим
+     экрана берёт из этих тегов — без них на домашний экран попадёт
+     скриншот страницы в обычном Safari с адресной строкой. -->
+<link rel="apple-touch-icon" href="./icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Дневник">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="${ICON_BG}">
+<style>
+:root{color-scheme:light dark}
+html{background:#f2f4f7}
+@media (prefers-color-scheme: dark){html{background:#0e1116}}
+body{margin:0;font:14px system-ui,sans-serif}
+img{max-width:100%}
+[hidden]{display:none!important}
+/* Вырезы и домашний индикатор: приложение растянуто на весь экран */
+header.top{padding-top:env(safe-area-inset-top)}
+.wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+</style>`;
+
+const pwaBoot = `<script>
+// Service worker — это и есть офлайн: без него установленное
+// приложение при отсутствии сети покажет пустую страницу.
+if ("serviceWorker" in navigator) {
+  addEventListener("load", function () {
+    navigator.serviceWorker.register("./sw.js").catch(function () {});
+  });
+}
+</script>`;
+
+const pwaDoc = `<!doctype html>
+<html lang="ru">
+<head>
+${pwaHead}
+</head>
+<body>
+${bundle}${pwaBoot}
+</body>
+</html>
+`;
+
+const sw = `/* Железный дневник — офлайн. Сборка ${BUILD}. Файл собран build.mjs. */
+"use strict";
+const CACHE = "zhd-${BUILD}";
+const SHELL = ${JSON.stringify(["./", "./index.html", "./manifest.webmanifest", ...APP_ICONS.map((i) => "./" + i.name)])};
+
+// Оболочка кладётся в кэш при установке: приложение обязано открыться
+// с первого же запуска без сети.
+self.addEventListener("install", (e) => {
+  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
+});
+
+// Старые версии сносим целиком — кэш назван по отпечатку сборки.
+self.addEventListener("activate", (e) => {
+  e.waitUntil(
+    caches.keys()
+      .then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
+      .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener("fetch", (e) => {
+  const req = e.request;
+  if (req.method !== "GET") return;
+  const url = new URL(req.url);
+
+  // Навигация: сеть вперёд, чтобы свежая версия подхватывалась сама,
+  // но при её отсутствии отдаём страницу из кэша. Без этой ветки
+  // офлайн-запуск упирается в ошибку сети.
+  if (req.mode === "navigate") {
+    e.respondWith(
+      fetch(req)
+        .then((r) => { const c = r.clone(); caches.open(CACHE).then((h) => h.put("./index.html", c)); return r; })
+        .catch(() => caches.match("./index.html").then((r) => r || caches.match("./")))
+    );
+    return;
+  }
+
+  // Шрифты Google лежат на чужом origin и в SHELL их не положить:
+  // адреса файлов зависят от браузера. Забираем в кэш по факту
+  // первой загрузки — со второго запуска они доступны офлайн.
+  const font = url.host === "fonts.googleapis.com" || url.host === "fonts.gstatic.com";
+  e.respondWith(
+    caches.match(req).then((hit) => {
+      if (hit) return hit;
+      return fetch(req).then((r) => {
+        if (r && (r.ok || (font && r.type === "opaque"))) {
+          const c = r.clone();
+          caches.open(CACHE).then((h) => h.put(req, c));
+        }
+        return r;
+      }).catch(() => hit);
+    })
+  );
+});
+`;
+
+fs.mkdirSync(PWA, { recursive: true });
+fs.writeFileSync(path.join(PWA, "index.html"), pwaDoc);
+fs.writeFileSync(path.join(PWA, "manifest.webmanifest"), JSON.stringify(webmanifest, null, 2) + "\n");
+fs.writeFileSync(path.join(PWA, "sw.js"), sw);
+// .nojekyll: GitHub Pages иначе прячет файлы и папки, начинающиеся с _
+fs.writeFileSync(path.join(PWA, ".nojekyll"), "");
+APP_ICONS.forEach((i) => fs.writeFileSync(path.join(PWA, i.name), i.data));
+
 console.log(`собрано → dist/artifact.html (${size(bundle)})`);
 console.log(`         dist/index.html   (предпросмотр в браузере)`);
+console.log(`         dist/pwa/         (устанавливаемое приложение, сборка ${BUILD})`);
 
 function size(s) {
   return (Buffer.byteLength(s, "utf8") / 1024).toFixed(1) + " КБ";
