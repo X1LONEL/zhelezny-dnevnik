@@ -164,7 +164,7 @@ function renderNutCharts(){
     const a = kc[k], d = parseISO(k);
     const v = a ? Math.round(mean(a)) : 0;
     const inRange = v >= RANGE.kcal[0] && v <= RANGE.kcal[1];
-    return {label: d.getDate()+"."+(d.getMonth()+1), v,
+    return {label: fmtShort(k), v,
       full:"Неделя с "+pad(d.getDate())+" "+MON[d.getMonth()],
       tip: a ? v.toLocaleString("ru-RU")+" ккал в среднем · "+a.length+" дн. записано" : "нет записей",
       color: !a ? cssv("--surface-3") : (inRange ? cssv("--good") : cssv("--warn"))};
@@ -174,7 +174,7 @@ function renderNutCharts(){
   if(!anyKc) calBox.innerHTML = '<div class="empty"><b>Записей пока нет</b>Отмечай приёмы пищи выше — здесь появятся средние калории по неделям.</div>';
   else barChart(calBox, bars, {labelEvery:2, aria:"Средние калории за неделю", fmtY: t => t >= 1000 ? round1(t/1000)+"к" : String(Math.round(t))});
 
-  const pts = keys.map(k => { const d = parseISO(k); return {label: d.getDate()+"."+(d.getMonth()+1), full:"Неделя с "+pad(d.getDate())+" "+MON[d.getMonth()]}; });
+  const pts = keys.map(k => { const d = parseISO(k); return {label: fmtShort(k), full:"Неделя с "+pad(d.getDate())+" "+MON[d.getMonth()]}; });
   const vals = keys.map(k => wt[k] ? round1(mean(wt[k])) : null);
   const wBox = document.getElementById("wkWeightChart");
   if(!vals.some(v => v != null)) wBox.innerHTML = '<div class="empty"><b>Нет взвешиваний</b>Записывай вес на вкладке «Прогресс» — кривая появится здесь.</div>';

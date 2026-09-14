@@ -57,9 +57,12 @@ function lineChart(mount, points, series, opts){
     svg.appendChild(el("line", {x1:mL, x2:W-mR, y1:Y(t), y2:Y(t), stroke:line, "stroke-width":1}));
     svg.appendChild(el("text", {x:mL-7, y:Y(t)+4, "text-anchor":"end", fill:ink3, "font-size":10.5, "font-family":"'IBM Plex Mono',monospace"}, fmtKg(t)));
   });
+  // Шаг подписей отсчитывается от конца шкалы, а не от начала: последняя
+  // дата нужна всегда, а если добавлять её поверх шага от начала, она
+  // встаёт вплотную к предпоследней и подписи налезают друг на друга.
   const every = Math.max(1, Math.ceil(n/7));
   points.forEach((p,i) => {
-    if(i % every === 0 || i === n-1)
+    if((n-1-i) % every === 0)
       svg.appendChild(el("text", {x:X(i), y:H-8, "text-anchor":"middle", fill:ink3, "font-size":10.5, "font-family":"'IBM Plex Mono',monospace"}, p.label));
   });
 
@@ -132,7 +135,7 @@ function barChart(mount, bars, opts){
       r.addEventListener("mouseleave", hideTip);
       svg.appendChild(r);
     }
-    if(i % (opts.labelEvery || 1) === 0 || i === bars.length-1)
+    if((bars.length-1-i) % (opts.labelEvery || 1) === 0)   // шаг от конца шкалы, см. lineChart
       svg.appendChild(el("text", {x:x+w/2, y:H-7, "text-anchor":"middle", fill:ink3, "font-size":10, "font-family":"'IBM Plex Mono',monospace"}, b.label));
   });
   mount.appendChild(svg);

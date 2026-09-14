@@ -97,7 +97,7 @@ function renderVolume(){
   keys.forEach(k => {
     const v = vol.get(k) || 0, c = m.get(k) || 0;
     const d = parseISO(k);
-    bars.push({label: d.getDate()+"."+(d.getMonth()+1), v,
+    bars.push({label: fmtShort(k), v,
       full:"Неделя с "+pad(d.getDate())+" "+MON[d.getMonth()],
       tip: v ? v.toLocaleString("ru-RU")+" кг · "+c+" трен." : "нет тренировок",
       color: c === 0 ? cssv("--surface-3") : (c >= 3 ? cssv("--accent") : cssv("--warn"))});
