@@ -3,6 +3,7 @@
    ============================================================ */
 function renderProgress(){
   renderKpis();
+  renderLifts();
   renderExChart();
   renderPr();
   renderVolume();
@@ -35,6 +36,40 @@ function renderKpis(){
   ).join("");
 }
 
+// Основные движения: сила по расчётному 1ПМ и сдвиг за 4 недели
+const MAIN_LIFTS = ["squat","bench","rdl","row","deadlift"];
+function renderLifts(){
+  const box = document.getElementById("lifts");
+  if(!box) return;
+  const from = new Date(today()); from.setDate(from.getDate()-28);
+  box.innerHTML = "";
+  MAIN_LIFTS.forEach(id => {
+    const h = exHistory(id);
+    const b = document.createElement("button");
+    b.type = "button";
+    if(!h.length){
+      // становая появляется только во 2-м блоке: пустую карточку не показываем,
+      // остальные — показываем, чтобы было видно, что они ждут записи
+      if(id === "deadlift") return;
+      b.className = "lift none"; b.disabled = true;
+      b.innerHTML = '<div class="l">'+esc(EX[id].n)+'</div><div class="v">—</div><div class="d">нет записей</div>';
+      box.appendChild(b); return;
+    }
+    const last = h[h.length-1];
+    const before = h.filter(x => parseISO(x.date) < from);
+    const base = before.length ? before[before.length-1] : h[0];
+    const d = round1(last.best1rm - base.best1rm);
+    b.className = "lift" + (selEx === id ? " sel" : "");
+    b.innerHTML = '<div class="l">'+esc(EX[id].n)+'</div>'+
+      '<div class="v">'+fmtKg(last.best1rm)+' <small>кг</small></div>'+
+      '<div class="d'+(d > 0 ? ' up' : '')+'">'+(h.length < 2 ? "первая запись" : (d > 0 ? "+" : d < 0 ? "−" : "±")+fmtKg(Math.abs(d))+" кг")+'</div>'+
+      sparkline(h.slice(-12).map(x => x.best1rm));
+    b.setAttribute("aria-label", EX[id].n+": расчётный 1ПМ "+fmtKg(last.best1rm)+" кг. Показать график");
+    b.onclick = ()=>{ selEx = id; renderLifts(); renderExChart(); document.getElementById("exSel").scrollIntoView({behavior:"smooth", block:"center"}); };
+    box.appendChild(b);
+  });
+}
+
 function exWithData(){ return Object.keys(EX).filter(id => EX[id].kind !== "time" && exHistory(id).length); }
 let selEx = null;
 function renderExChart(){
@@ -51,7 +86,7 @@ function renderExChart(){
   sel.disabled = false;
   if(!selEx || ids.indexOf(selEx) < 0) selEx = ids[0];
   sel.innerHTML = ids.map(id => '<option value="'+id+'"'+(id===selEx?' selected':'')+'>'+esc(EX[id].n)+'</option>').join("");
-  sel.onchange = ()=>{ selEx = sel.value; renderExChart(); };
+  sel.onchange = ()=>{ selEx = sel.value; renderExChart(); renderLifts(); };
 
   const h = exHistory(selEx);
   document.getElementById("exSelNote").textContent = h.length + " " + (h.length===1?"тренировка":"тренировок") + " · 1ПМ по формуле Эпли";
@@ -165,6 +200,22 @@ function renderBody(){
     const pts = e.map(x => ({label: fmtShort(x.d), full: fmtShort(x.d), extra: x.waist ? "талия "+x.waist+" см" : ""}));
     lineChart(box, pts, [{label:"Вес", color: cssv("--accent"), vals: e.map(x=>x.kg)}], {h:170, aria:"Динамика веса тела"});
   }
+  // последние замеры — с возможностью убрать ошибочный
+  const list = document.getElementById("bwList");
+  const tail = e.slice(-5).reverse();
+  list.innerHTML = tail.map(x =>
+    '<div class="bodyrow"><span class="d">'+fmtShort(x.d)+'</span><span class="k">'+fmtKg(x.kg)+' кг</span>'+
+    '<span class="o">'+[x.waist ? "талия "+x.waist : "", x.arm ? "рука "+x.arm : ""].filter(Boolean).join(" · ")+'</span>'+
+    '<button type="button" data-d="'+x.d+'" aria-label="Удалить замер за '+fmtShort(x.d)+'">×</button></div>'
+  ).join("");
+  list.querySelectorAll("button[data-d]").forEach(btn => btn.onclick = async ()=>{
+    const d = btn.dataset.d;
+    if(!(await askConfirm("Удалить замер?", "Взвешивание за " + fmtShort(d) + " пропадёт из графиков.", "Удалить"))) return;
+    S.body.entries = S.body.entries.filter(x => x.d !== d);
+    await saveBody();
+    renderBody(); renderKpis();
+  });
+
   // подсказка по калориям: среднее за последние 7 дней против предыдущих 7
   const adv = document.getElementById("bwAdvice");
   const avg = (from, to) => {

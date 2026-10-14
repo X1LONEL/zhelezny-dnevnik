@@ -59,7 +59,9 @@ try {
   fail(`синтаксическая ошибка в собранном скрипте: ${e.message}`);
 }
 
-const head = `<title>${manifest.title}</title>`;
+// viewport-fit-sides: боковые отступы страницы считаются через
+// max(16px, env(safe-area-inset-*)), поэтому её можно пускать под вырез
+const head = `<title>${manifest.title}</title>\n<meta name="claude:viewport-fit-sides" content="cover">`;
 const bundle = `${head}\n<style>\n${css}\n</style>\n\n${html}\n\n<script>\n"use strict";\n${js}\n</script>\n`;
 
 if (process.argv.includes("--check")) {
@@ -119,7 +121,7 @@ const webmanifest = {
   scope: "./",
   display: "standalone",
   orientation: "portrait",
-  background_color: "#f2f4f7",
+  background_color: "#eceef1",
   theme_color: ICON_BG,
   icons: [
     { src: "./icon-192.png", sizes: "192x192", type: "image/png" },
@@ -142,14 +144,15 @@ const pwaHead =`<meta charset="utf-8">
 <meta name="theme-color" content="${ICON_BG}">
 <style>
 :root{color-scheme:light dark}
-html{background:#f2f4f7}
-@media (prefers-color-scheme: dark){html{background:#0e1116}}
+html{background:#eceef1}
+@media (prefers-color-scheme: dark){html{background:#0a0c0f}}
 body{margin:0;font:14px system-ui,sans-serif}
 img{max-width:100%}
 [hidden]{display:none!important}
-/* Вырезы и домашний индикатор: приложение растянуто на весь экран */
-header.top{padding-top:env(safe-area-inset-top)}
-.wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+/* Вырезы: приложение растянуто на весь экран, а :root здесь, в отличие
+   от артефакта, не подбит отступами — шапка берёт вырез на себя.
+   Нижний индикатор учитывают сами .wrap, .tabs и .dock. */
+header.top{top:0;padding-top:env(safe-area-inset-top)}
 </style>`;
 
 const pwaBoot = `<script>

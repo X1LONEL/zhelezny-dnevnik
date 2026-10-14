@@ -54,7 +54,7 @@ function lineChart(mount, points, series, opts){
   const line = cssv("--line"), ink3 = cssv("--ink-3");
 
   ticks.forEach(t => {
-    svg.appendChild(el("line", {x1:mL, x2:W-mR, y1:Y(t), y2:Y(t), stroke:line, "stroke-width":1}));
+    svg.appendChild(el("line", {x1:mL, x2:W-mR, y1:Y(t), y2:Y(t), stroke:line, "stroke-width":1, "stroke-dasharray": t === y0 ? "" : "2 4"}));
     svg.appendChild(el("text", {x:mL-7, y:Y(t)+4, "text-anchor":"end", fill:ink3, "font-size":10.5, "font-family":"'IBM Plex Mono',monospace"}, fmtKg(t)));
   });
   // Шаг подписей отсчитывается от конца шкалы, а не от начала: последняя
@@ -66,10 +66,21 @@ function lineChart(mount, points, series, opts){
       svg.appendChild(el("text", {x:X(i), y:H-8, "text-anchor":"middle", fill:ink3, "font-size":10.5, "font-family":"'IBM Plex Mono',monospace"}, p.label));
   });
 
+  // заливка под первой серией: только видимая форма, без второй шкалы
+  if(series.length){
+    const s0 = series[0], idx = s0.vals.map((v,i)=>v==null?-1:i).filter(i=>i>=0);
+    if(idx.length > 1){
+      const base = mT + ih;
+      let d = "M"+X(idx[0])+" "+base;
+      idx.forEach(i => { d += " L"+X(i)+" "+Y(s0.vals[i]); });
+      d += " L"+X(idx[idx.length-1])+" "+base+" Z";
+      svg.appendChild(el("path", {d, fill:s0.color, "fill-opacity":0.08, stroke:"none"}));
+    }
+  }
   series.forEach(s => {
     let d = "", started = false;
     s.vals.forEach((v,i) => { if(v == null){ started = false; return; } d += (started?"L":"M") + X(i) + " " + Y(v) + " "; started = true; });
-    svg.appendChild(el("path", {d, fill:"none", stroke:s.color, "stroke-width":2, "stroke-linejoin":"round", "stroke-linecap":"round"}));
+    svg.appendChild(el("path", {d, fill:"none", stroke:s.color, "stroke-width":2.25, "stroke-linejoin":"round", "stroke-linecap":"round"}));
     s.vals.forEach((v,i) => {
       if(v == null) return;
       const last = i === n-1;
@@ -139,4 +150,20 @@ function barChart(mount, bars, opts){
       svg.appendChild(el("text", {x:x+w/2, y:H-7, "text-anchor":"middle", fill:ink3, "font-size":10, "font-family":"'IBM Plex Mono',monospace"}, b.label));
   });
   mount.appendChild(svg);
+}
+
+// Спарклайн для карточек: только форма ряда, последняя точка выделена.
+// Цвет берётся из токена через style — атрибут fill/stroke var() не понимает.
+function sparkline(vals){
+  if(vals.length < 2) return "";
+  const W = 140, H = 30, p = 3;
+  let mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals);
+  if(mx - mn < 1){ mn -= 1; mx += 1; }
+  const X = i => p + (W - 2*p) * i/(vals.length-1);
+  const Y = v => H - p - (H - 2*p) * (v - mn)/(mx - mn);
+  const d = vals.map((v,i) => (i ? "L" : "M") + X(i).toFixed(1) + " " + Y(v).toFixed(1)).join(" ");
+  const li = vals.length-1;
+  return '<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" aria-hidden="true">'+
+    '<path d="'+d+'" style="fill:none;stroke:var(--accent);stroke-width:1.75;stroke-linejoin:round;stroke-linecap:round"/>'+
+    '<circle cx="'+X(li).toFixed(1)+'" cy="'+Y(vals[li]).toFixed(1)+'" r="2.5" style="fill:var(--accent)"/></svg>';
 }

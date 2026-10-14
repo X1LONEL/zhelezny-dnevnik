@@ -36,15 +36,23 @@ function renderFood(){
     {k:"f",    l:"Жиры",    u:"г",    v:Math.round(tot.f),    t:TARGET.f,    r:RANGE.f},
     {k:"c",    l:"Углеводы",u:"г",    v:Math.round(tot.c),    t:TARGET.c,    r:RANGE.c}
   ];
-  document.getElementById("fdMeters").innerHTML = rows.map(r => {
-    const pct = Math.min(100, Math.round(r.v / r.t * 100));
-    const cls = r.v > r.r[1] ? " over" : (r.v >= r.r[0] ? " hit" : "");
-    const left = r.t - r.v;
-    return '<div class="meter"><div class="l"><span>'+r.l+'</span><em>'+r.r[0]+'–'+r.r[1]+'</em></div>'+
-      '<div class="v">'+r.v+' <small>/ '+r.t+' '+r.u+'</small></div>'+
-      '<span class="mtrack"><span class="mfill'+cls+'" style="width:'+pct+'%"></span></span>'+
-      '<div class="s tiny" style="margin-top:5px">'+(left > 0 ? "осталось "+left+" "+r.u : (r.v > r.r[1] ? "перебор "+(r.v-r.t)+" "+r.u : "норма закрыта"))+'</div></div>';
-  }).join("");
+  const cls = r => r.v > r.r[1] ? " over" : (r.v >= r.r[0] ? " hit" : "");
+  const leftTxt = r => { const left = r.t - r.v; return left > 0 ? "осталось "+left+" "+r.u : (r.v > r.r[1] ? "перебор "+(r.v-r.t)+" "+r.u : "норма закрыта"); };
+  const k = rows[0];
+  const C = 2*Math.PI*58;
+  const kf = Math.min(1, k.v / k.t);
+  document.getElementById("fdMeters").innerHTML =
+    '<div class="kring" role="img" aria-label="Калории: '+k.v+' из '+k.t+'">'+
+      '<svg viewBox="0 0 132 132"><circle class="bg" cx="66" cy="66" r="58"/>'+
+      '<circle class="fg'+cls(k)+'" cx="66" cy="66" r="58" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+(C*(1-kf)).toFixed(1)+'"/></svg>'+
+      '<div class="c"><b>'+k.v+'</b><span>из '+k.t+' ккал</span><span>'+leftTxt(k)+'</span></div></div>'+
+    '<div class="macrobars">' + rows.slice(1).map(r => {
+      const pct = Math.min(100, Math.round(r.v / r.t * 100));
+      return '<div class="meter"><div class="l"><span>'+r.l+' <span class="tiny">'+r.r[0]+'–'+r.r[1]+'</span></span>'+
+        '<span class="v">'+r.v+' <small>/ '+r.t+' '+r.u+'</small></span></div>'+
+        '<span class="mtrack"><span class="mfill'+cls(r)+'" style="width:'+pct+'%"></span></span>'+
+        '<div class="s">'+leftTxt(r)+'</div></div>';
+    }).join("") + '</div>';
 
   // приёмы по плану
   const box = document.getElementById("fdMeals");
@@ -54,13 +62,12 @@ function renderFood(){
     const b = document.createElement("button");
     b.type = "button"; b.className = "mealrow" + (on ? " on" : "");
     b.setAttribute("aria-pressed", on ? "true" : "false");
-    b.innerHTML = '<span class="tick">✓</span><span class="mid">'+
+    b.innerHTML = '<span class="tick">'+CHECK_SVG+'</span><span class="mid">'+
       '<span class="t"></span><span class="d"></span>'+
       '<span class="m">Б '+m.p+' · Ж '+m.f+' · У '+m.c+'</span></span>'+
       '<span class="kc">'+m.kcal+'</span>';
     b.querySelector(".t").textContent = m.t;
     b.querySelector(".d").textContent = m.d;
-    b.querySelectorAll(".t,.d,.m").forEach(n => n.style.display = "block");
     b.onclick = ()=>{
       const cur = nutItems(fdDate).slice();
       const i = cur.findIndex(x => x.k === m.k);

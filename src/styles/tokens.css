@@ -1,90 +1,130 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
+/* Раскладка: одна колонка до 960px; на телефоне навигация внизу у большого
+   пальца, на широком экране — сегменты в шапке. Единственное «громкое»
+   место — тёмная плита недели цикла на экране тренировки, всё остальное тихое.
+   Archivo в растянутой ширине (wdth 125) — заголовки и плита, обычная
+   ширина — интерфейс, IBM Plex Mono — все цифры. */
 :root{
   color-scheme: light;
-  --bg:#f2f4f7;
+  --bg:#eceef1;
   --surface:#ffffff;
-  --surface-2:#e9ecf1;
-  --surface-3:#dfe3ea;
-  --ink:#131720;
-  --ink-2:#525c6b;
-  --ink-3:#828c9c;
-  --line:#d8dde5;
-  --line-2:#c3cad5;
-  --accent:#2a5fb5;
-  --accent-ink:#22508f;
-  --accent-soft:#e4ebf8;
-  --series-2:#eb6834;
-  --rec:#c8322c;
-  --rec-soft:#fbe8e6;
-  --good:#1b7a4e;
-  --good-soft:#e0f2e8;
-  --warn:#a86400;
+  --surface-2:#f3f4f7;
+  --surface-3:#e2e5ea;
+  --ink:#0f1218;
+  --ink-2:#4a5361;
+  --ink-3:#768090;
+  --line:#e0e3e9;
+  --line-2:#c9ced7;
+  --accent:#2457d6;
+  --accent-ink:#1d47b0;
+  --accent-soft:#e3eafb;
+  --on-accent:#ffffff;
+  --series-2:#e5602a;
+  --rec:#cf2f28;
+  --rec-soft:#fce7e5;
+  --good:#16794b;
+  --good-soft:#dff2e7;
+  --warn:#a86200;
   --warn-soft:#fbeed6;
-  --shadow:0 1px 2px rgba(19,23,32,.06), 0 6px 18px -10px rgba(19,23,32,.18);
-  --r:10px;
+  /* плита недели: тёмная в обеих темах, это и есть акцент страницы */
+  --slab:#11151c;
+  --slab-2:#1d232d;
+  --slab-line:#2c3440;
+  --slab-ink:#f2f4f7;
+  --slab-ink-2:#9aa4b3;
+  --slab-acc:#7ea3ff;
+  --scrim:rgba(10,12,16,.48);
+  --shadow:0 1px 2px rgba(15,18,24,.05), 0 8px 24px -14px rgba(15,18,24,.22);
+  --shadow-up:0 -1px 0 var(--line), 0 -10px 30px -18px rgba(15,18,24,.35);
+  --r:14px;
+  --r-sm:9px;
   --plate-chrome:#b9c0c9;
+  --navh:64px;
+  --f-ui:'Archivo','Helvetica Neue',Arial,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     color-scheme: dark;
-    --bg:#0e1116;
-    --surface:#171b22;
-    --surface-2:#1e242d;
-    --surface-3:#262d38;
-    --ink:#eef1f6;
-    --ink-2:#9ba5b4;
-    --ink-3:#6c7686;
-    --line:#282f3a;
-    --line-2:#38414f;
-    --accent:#5a8fe0;
-    --accent-ink:#8fb4ec;
-    --accent-soft:#1a2739;
-    --series-2:#d95926;
-    --rec:#ef6a5f;
-    --rec-soft:#2e1a19;
-    --good:#3fa877;
-    --good-soft:#13241d;
-    --warn:#d99a2b;
+    --bg:#0a0c0f;
+    --surface:#14171c;
+    --surface-2:#1a1e25;
+    --surface-3:#252a33;
+    --ink:#f1f3f6;
+    --ink-2:#a3acba;
+    --ink-3:#6f7889;
+    --line:#22272f;
+    --line-2:#323944;
+    --accent:#6d97ff;
+    --accent-ink:#9db9ff;
+    --accent-soft:#18233b;
+    --on-accent:#0a0c0f;
+    --series-2:#f0874a;
+    --rec:#f06a5f;
+    --rec-soft:#2f1a19;
+    --good:#41b37d;
+    --good-soft:#12251c;
+    --warn:#dca03a;
     --warn-soft:#2a2113;
-    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+    --slab:#161b23;
+    --slab-2:#202733;
+    --slab-line:#2f3745;
+    --slab-ink:#f2f4f7;
+    --slab-ink-2:#97a1b0;
+    --slab-acc:#86a8ff;
+    --scrim:rgba(0,0,0,.62);
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+    --shadow-up:0 -1px 0 var(--line), 0 -12px 30px -16px rgba(0,0,0,.8);
     --plate-chrome:#767f8c;
   }
 }
 :root[data-theme="dark"]{
   color-scheme: dark;
-  --bg:#0e1116;
-  --surface:#171b22;
-  --surface-2:#1e242d;
-  --surface-3:#262d38;
-  --ink:#eef1f6;
-  --ink-2:#9ba5b4;
-  --ink-3:#6c7686;
-  --line:#282f3a;
-  --line-2:#38414f;
-  --accent:#5a8fe0;
-  --accent-ink:#8fb4ec;
-  --accent-soft:#1a2739;
-  --series-2:#d95926;
-  --rec:#ef6a5f;
-  --rec-soft:#2e1a19;
-  --good:#3fa877;
-  --good-soft:#13241d;
-  --warn:#d99a2b;
+  --bg:#0a0c0f;
+  --surface:#14171c;
+  --surface-2:#1a1e25;
+  --surface-3:#252a33;
+  --ink:#f1f3f6;
+  --ink-2:#a3acba;
+  --ink-3:#6f7889;
+  --line:#22272f;
+  --line-2:#323944;
+  --accent:#6d97ff;
+  --accent-ink:#9db9ff;
+  --accent-soft:#18233b;
+  --on-accent:#0a0c0f;
+  --series-2:#f0874a;
+  --rec:#f06a5f;
+  --rec-soft:#2f1a19;
+  --good:#41b37d;
+  --good-soft:#12251c;
+  --warn:#dca03a;
   --warn-soft:#2a2113;
-  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  --slab:#161b23;
+  --slab-2:#202733;
+  --slab-line:#2f3745;
+  --slab-ink:#f2f4f7;
+  --slab-ink-2:#97a1b0;
+  --slab-acc:#86a8ff;
+  --scrim:rgba(0,0,0,.62);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+  --shadow-up:0 -1px 0 var(--line), 0 -12px 30px -16px rgba(0,0,0,.8);
   --plate-chrome:#767f8c;
 }
 
 *{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
 body{
   margin:0; background:var(--bg); color:var(--ink);
-  font-family:'Archivo','Helvetica Neue',Arial,sans-serif;
+  font-family:var(--f-ui);
   font-size:15px; line-height:1.5;
   -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
 }
-.mono{font-family:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;font-variant-numeric:tabular-nums}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.wide{font-stretch:125%}
 button{font:inherit;color:inherit;cursor:pointer}
 input,select{font:inherit;color:inherit}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
 @media (prefers-reduced-motion: reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}

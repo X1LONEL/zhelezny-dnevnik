@@ -1,10 +1,12 @@
-<div class="resttimer" id="restTimer">
-  <div>
-    <div class="lb">Отдых</div>
-    <div class="t" id="restT">0:00</div>
+<div class="modal" id="confirmBox" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" hidden>
+  <div class="modal-card">
+    <h3 id="confirmTitle"></h3>
+    <p id="confirmText"></p>
+    <div class="row">
+      <button class="btn ghost" id="confirmNo" type="button">Отмена</button>
+      <button class="btn danger" id="confirmYes" type="button">Да</button>
+    </div>
   </div>
-  <button id="restPlus">+30 с</button>
-  <button id="restStop">Стоп</button>
 </div>
 <div class="tipbox" id="tip"></div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>

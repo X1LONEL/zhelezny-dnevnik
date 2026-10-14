@@ -1,19 +1,50 @@
   <!-- ================= TRAINING ================= -->
   <div class="panel on" id="p-train" role="tabpanel" aria-labelledby="tab-train">
     <section>
-      <h2 class="sec">Тренировка на сегодня</h2>
-      <div class="daypick" id="dayPick"></div>
-      <div id="weekNote" class="notebox" style="margin-bottom:14px"></div>
-      <div class="exlist" id="exList"></div>
-      <div class="finishbar">
-        <div class="summary">
-          <div>Подходов<b id="sumSets">0</b></div>
-          <div>Тоннаж<b id="sumVol">0 <small>кг</small></b></div>
-          <div>Рекордов<b id="sumPr">0</b></div>
+      <div class="slab">
+        <div class="slab-top">
+          <div>
+            <div class="eyebrow" id="slabBlock">Блок 1 · Full Body</div>
+            <div class="wk" id="slabWeek">Неделя 1</div>
+          </div>
+          <div class="slab-date">
+            <label for="woDate">Дата тренировки</label>
+            <input type="date" id="woDate">
+          </div>
         </div>
-        <span class="savestate" id="saveState"></span>
-        <button class="btn ghost" id="btnClear">Сбросить</button>
-        <button class="btn pri" id="btnFinish">Завершить тренировку</button>
+        <div class="cycle" id="cycleBar" aria-hidden="true"></div>
+        <div class="cycle-l" aria-hidden="true"><span>1–4 · Full Body</span><span>5–8 · Верх / Низ</span><span>9</span></div>
+        <div class="note" id="weekNote"></div>
+        <div class="slab-stats">
+          <div>Эта неделя<b><span id="wkCount">0/3</span><span class="dots" id="dotsWeek"></span></b></div>
+          <div>Серия<b id="slabStreak">0</b></div>
+          <div>Прошлая тренировка<b id="slabLast">—</b></div>
+        </div>
+      </div>
+
+      <div class="daypick" id="dayPick" role="group" aria-label="День программы"></div>
+      <div class="exlist" id="exList"></div>
+      <div class="trainfoot"><button class="btn sm ghost" id="btnClear" type="button">Сбросить введённое</button></div>
+
+      <div class="dock">
+        <div class="resttimer" id="restTimer" role="timer" aria-live="off">
+          <svg class="ring" viewBox="0 0 44 44" aria-hidden="true"><circle class="bg" cx="22" cy="22" r="18"/><circle class="fg" id="restRing" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="0" transform="rotate(-90 22 22)"/></svg>
+          <div>
+            <div class="lb">Отдых</div>
+            <div class="t" id="restT">0:00</div>
+          </div>
+          <span class="sp"></span>
+          <button type="button" id="restPlus">+30 с</button>
+          <button type="button" id="restStop">Готов</button>
+        </div>
+        <div class="finishbar">
+          <div class="summary">
+            <div>Подходы<b><span id="sumSets">0</span><small id="sumPlan"></small></b></div>
+            <div>Тоннаж<b id="sumVol">0 <small>кг</small></b></div>
+            <div>Рекорды<b id="sumPr">0</b></div>
+          </div>
+          <button class="btn pri" id="btnFinish" type="button">Завершить</button>
+        </div>
       </div>
     </section>
   </div>

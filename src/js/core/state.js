@@ -69,10 +69,9 @@ function mergeBackup(cur, inc){
 
 let saveTimer = null, saveMsgTimer = null;
 function markSaving(){
-  const el = document.getElementById("saveState");
-  el.textContent = "сохраняю…";
+  setSaveState("сохраняю…", !dbReady);
   clearTimeout(saveMsgTimer);
-  saveMsgTimer = setTimeout(()=>{ el.textContent = dbReady ? "сохранено" : "сохранено локально"; }, 900);
+  saveMsgTimer = setTimeout(()=>{ setSaveState(dbReady ? "сохранено" : "сохранено локально", !dbReady); }, 900);
 }
 function queueDraftSave(){
   lsSave(); markSaving();

@@ -1,19 +1,31 @@
-/* ---------- program ---------- */
+/* ---------- программа ---------- */
 .ptable{width:100%;border-collapse:collapse;font-size:13.5px}
-.ptable th{text-align:left;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:7px 10px;font-weight:700;border-bottom:1px solid var(--line)}
-.ptable td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.ptable th{text-align:left;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:8px 10px;font-weight:700;border-bottom:1px solid var(--line)}
+.ptable td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
 .ptable tr:last-child td{border-bottom:0}
-.ptable td.num{font-family:'IBM Plex Mono',monospace;white-space:nowrap;font-weight:500}
+.ptable td.num{font-family:var(--f-mono);white-space:nowrap;font-weight:500;font-variant-numeric:tabular-nums}
 .ptable td.num.dim{color:var(--ink-3)}
+.ptable.mt{margin-top:14px}
 .tscroll{overflow-x:auto}
 .tscroll .ptable{min-width:540px}
-.blockhead{display:flex;align-items:baseline;gap:10px;margin:0 0 8px;flex-wrap:wrap}
-.blockhead h3{margin:0;font-size:16px;font-weight:700;letter-spacing:-.01em}
-.blockhead .w{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-3)}
-.notebox{background:var(--surface-2);border-radius:8px;padding:11px 13px;font-size:13px;color:var(--ink-2);margin-top:10px}
+.blockhead{display:flex;align-items:center;gap:10px;margin:0 0 10px;flex-wrap:wrap}
+.blockhead h3{margin:0;font-size:17px;font-weight:850;letter-spacing:-.01em;font-stretch:125%}
+.blockhead .w{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+.planblock{margin-bottom:22px}
+.daycard{overflow:hidden}
+.daycard .dh{padding:12px 14px 4px;display:flex;align-items:baseline;gap:8px}
+.daycard .dh b{font-weight:800;font-size:15.5px}
+.daycard .dh span{font-size:12px;color:var(--ink-3);font-family:var(--f-mono)}
+.notebox{background:var(--surface-2);border-radius:12px;padding:12px 14px;font-size:13.5px;color:var(--ink-2);margin-top:10px}
 .notebox b{color:var(--ink)}
-.macros{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:10px}
-.macro{background:var(--surface);padding:11px 13px}
-.macro .l{font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.07em;font-weight:700}
-.macro .v{font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:600;letter-spacing:-.02em}
-.macro .s{font-size:11px;color:var(--ink-3)}
+.notebox.flush{margin-top:0}
+.startrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.startrow .field{font-family:var(--f-mono);font-size:13px}
+.macros{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,120px),1fr));gap:10px}
+.macro{background:var(--surface-2);border-radius:12px;padding:12px 14px}
+.macro .l{font-size:12px;color:var(--ink-3);font-weight:650}
+.macro .v{font-family:var(--f-mono);font-size:20px;font-weight:600;letter-spacing:-.02em}
+.macro .s{font-size:11.5px;color:var(--ink-3)}
+
+.ptable tr.now td{background:var(--accent-soft)}
+.ptable tr.now td:first-child{color:var(--accent-ink);font-weight:700}

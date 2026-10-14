@@ -2,10 +2,18 @@
    Обработчики
    ============================================================ */
 document.getElementById("btnFinish").onclick = finishWorkout;
-document.getElementById("btnClear").onclick = ()=>{
+document.getElementById("btnClear").onclick = async ()=>{
   if(!draftHasData()){ toast("Нечего сбрасывать"); return; }
-  if(!confirm("Очистить все введённые подходы этой тренировки?")) return;
-  S.draft = null; queueDraftSave(); renderTrain();
+  if(!(await askConfirm("Сбросить тренировку?", "Все введённые подходы и заметки этого дня будут очищены.", "Сбросить"))) return;
+  S.draft = null; stopRest(); queueDraftSave(); renderTrain();
+};
+document.getElementById("woDate").onchange = e => {
+  if(!S.draft) return;
+  const v = e.target.value;
+  // будущая дата и пустое поле возвращаются к сегодняшней
+  S.draft.date = v && v <= iso(today()) ? v : iso(today());
+  e.target.value = S.draft.date;
+  queueDraftSave();
 };
 document.getElementById("btnExport").onclick = exportCsv;
 document.getElementById("btnBackup").onclick = exportBackup;
@@ -38,7 +46,7 @@ document.getElementById("bwAdd").onclick = async ()=>{
   S.body.entries.sort((a,b)=> a.d < b.d ? -1 : 1);
   document.getElementById("bwKg").value = ""; document.getElementById("bwWaist").value = ""; document.getElementById("bwArm").value = "";
   await saveBody();
-  renderBody(); renderKpis();
+  renderBody(); renderKpis(); renderLifts();
   toast("Записано: " + fmtKg(kg) + " кг");
 };
 
@@ -101,14 +109,14 @@ function askPersistence(){
   seedDefaults();
   askPersistence();
   renderAll();
-  document.getElementById("saveState").textContent = "сохранено локально";
+  setSaveState("сохранено локально", true);
 
   // Облачное хранилище — подключается, когда станет доступно
   (async ()=>{
     let db = null;
     try{ db = await window.claude.use("db"); }catch(e){}
     if(!db){
-      document.getElementById("saveState").textContent = "сохранено на этом устройстве";
+      setSaveState("на этом устройстве", true);
       return;
     }
     DB = db; dbReady = true;
@@ -147,11 +155,11 @@ function askPersistence(){
         localOnly.forEach(w => { DB.collection("workouts").doc(w.id).set(w).catch(()=>{}); });
         S.workouts = cloud.concat(localOnly);
         lsSave();
-        document.getElementById("saveState").textContent = "сохранено";
+        setSaveState("сохранено", false);
         renderAll();
-      }, ()=>{ document.getElementById("saveState").textContent = "сохранено на этом устройстве"; });
+      }, ()=>{ setSaveState("на этом устройстве", true); });
     }catch(e){
-      document.getElementById("saveState").textContent = "сохранено на этом устройстве";
+      setSaveState("на этом устройстве", true);
     }
   })();
 })();

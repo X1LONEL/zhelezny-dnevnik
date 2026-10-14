@@ -1,22 +1,16 @@
-.empty{text-align:center;padding:34px 20px;color:var(--ink-3);font-size:14px}
-.empty b{display:block;color:var(--ink-2);font-size:15px;margin-bottom:4px;font-weight:600}
-.savestate{font-size:11px;color:var(--ink-3);font-family:'IBM Plex Mono',monospace}
-
-.toast{
-  position:fixed;bottom:16px;left:50%;transform:translateX(-50%) translateY(8px);
-  background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:13px;font-weight:600;
-  z-index:80;opacity:0;transition:opacity .18s,transform .18s;pointer-events:none;
-}
-.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-
+/* ---------- узкий экран ---------- */
 @media (max-width:520px){
-  .exhead{flex-wrap:wrap}
-  .exhead .target{order:4;margin-left:28px}
-  .exname{flex:1 1 calc(100% - 28px)}
-  .tab{padding:9px 10px 11px;font-size:13.5px}
-  .sets{max-width:none}
-  .setrow{grid-template-columns:18px 1fr 12px 1fr 50px 26px;gap:4px}
-  .inp{font-size:14px;padding:8px 2px}
-  .barrow{grid-template-columns:78px 1fr 40px}
-  .brand h1{font-size:17px}
+  .exhead{flex-wrap:wrap;padding:12px 12px 8px}
+  .exhead .target{order:4;margin-left:40px}
+  .exname{flex:1 1 calc(100% - 40px)}
+  .sets{max-width:none;padding:0 12px 10px}
+  .sethead,.setrow{grid-template-columns:18px 1fr 8px 1fr 50px 38px 20px;gap:5px}
+  .setrow .ok{width:38px}
+  .inp{font-size:15px;padding:9px 2px}
+  .exprog,.warm{margin-left:12px;margin-right:12px}
+  .barbell,.lastline{padding-left:12px;padding-right:12px}
+  .exfoot{padding:10px 12px 12px}
+  .barrow{grid-template-columns:84px 1fr 34px}
+  .slab{padding:16px 16px 14px;border-radius:18px}
+  .slab-stats{gap:16px}
 }

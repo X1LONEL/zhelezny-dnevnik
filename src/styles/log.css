@@ -1,13 +1,41 @@
-/* ---------- log ---------- */
-.logitem{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
-.logitem summary{padding:12px 14px;display:flex;gap:12px;align-items:baseline;cursor:pointer;list-style:none}
+/* ---------- журнал ---------- */
+.logweek{margin-bottom:18px}
+.logweek-h{
+  display:flex;align-items:baseline;gap:10px;margin:0 2px 8px;font-size:12.5px;color:var(--ink-3);font-weight:600;
+}
+.logweek-h b{color:var(--ink);font-weight:750;font-size:13.5px}
+.logweek-h .dots{margin-left:auto}
+.logitems{display:flex;flex-direction:column;gap:8px}
+.logitem{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+.logitem summary{padding:12px 14px;display:flex;gap:14px;align-items:center;cursor:pointer;list-style:none}
 .logitem summary::-webkit-details-marker{display:none}
-.logitem summary .d{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;min-width:52px}
-.logitem summary .nm{font-weight:700;flex:1;min-width:0}
-.logitem summary .v{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-3)}
-.logitem .body{padding:0 14px 14px;border-top:1px solid var(--line)}
-.logtable{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
-.logtable th{text-align:left;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:4px 6px;font-weight:700}
-.logtable td{padding:5px 6px;border-top:1px solid var(--line);font-family:'IBM Plex Mono',monospace}
-.logtable td:first-child{font-family:'Archivo',sans-serif;font-weight:600}
+.logitem .dbox{
+  width:46px;flex:none;text-align:center;border-radius:10px;background:var(--surface-2);padding:5px 0 4px;line-height:1.05;
+}
+.logitem .dbox b{display:block;font-family:var(--f-mono);font-size:19px;font-weight:600;letter-spacing:-.03em}
+.logitem .dbox span{font-size:10.5px;color:var(--ink-3);font-weight:650;text-transform:uppercase;letter-spacing:.06em}
+.logitem .nm{flex:1;min-width:0}
+.logitem .nm b{display:block;font-weight:750;font-size:15px}
+.logitem .nm .meta{font-size:12px;color:var(--ink-3);font-family:var(--f-mono)}
+.logitem .chev{width:18px;height:18px;color:var(--ink-3);transition:transform .2s;flex:none}
+.logitem[open] .chev{transform:rotate(180deg)}
+.logitem .body{padding:2px 14px 14px;border-top:1px solid var(--line)}
+.logtable{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+.logtable th{text-align:left;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:6px 6px;font-weight:700}
+.logtable td{padding:7px 6px;border-top:1px solid var(--line);font-family:var(--f-mono);vertical-align:top;font-variant-numeric:tabular-nums}
+.logtable td:first-child{font-family:var(--f-ui);font-weight:650}
 .logtable .np{color:var(--ink-3)}
+.logtable .prm{color:var(--rec);font-weight:700}
+.logactions{display:flex;justify-content:flex-end;margin-top:8px}
+
+.datatools{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.datatools .card{padding:16px;display:flex;flex-direction:column;gap:10px}
+.datatools h3{margin:0;font-size:15px;font-weight:750}
+.datatools p{margin:0;font-size:13px;color:var(--ink-2)}
+.datatools p b{color:var(--ink)}
+@media (max-width:520px){
+  .logtable thead{display:none}
+  .logtable tr{display:block;border-top:1px solid var(--line);padding:7px 0}
+  .logtable td{display:block;border:0;padding:1px 2px}
+  .logtable td + td{font-size:12.5px;color:var(--ink-2)}
+}

@@ -1,23 +1,29 @@
   <!-- ================= LOG ================= -->
   <div class="panel" id="p-log" role="tabpanel" aria-labelledby="tab-log">
     <section>
-      <h2 class="sec">Журнал тренировок</h2>
+      <h2 class="sec">Журнал тренировок <span class="aside" id="logCount"></span></h2>
       <div id="logList"></div>
-      <div class="row" style="margin-top:14px">
-        <button class="btn sm" id="btnExport">Выгрузить CSV</button>
-        <span class="tiny" id="logCount"></span>
-      </div>
     </section>
 
     <section>
-      <h2 class="sec">Резервная копия</h2>
-      <div class="card pad">
-        <div class="row">
-          <button class="btn sm" id="btnBackup">Сохранить копию</button>
-          <button class="btn sm ghost" id="btnRestore">Восстановить из файла</button>
-          <input type="file" id="restoreFile" accept="application/json,.json" hidden>
+      <h2 class="sec">Данные</h2>
+      <div class="datatools">
+        <div class="card">
+          <h3>Резервная копия</h3>
+          <p>Весь дневник одним файлом: тренировки, вес тела и питание. Через неё история переезжает на телефон. Восстановление <b>добавляет недостающее и никогда не затирает</b> уже записанное, поэтому старый файл безопасно открыть поверх свежих тренировок.</p>
+          <div class="row">
+            <button class="btn sm pri" id="btnBackup" type="button">Сохранить копию</button>
+            <button class="btn sm" id="btnRestore" type="button">Восстановить из файла</button>
+            <input type="file" id="restoreFile" accept="application/json,.json" hidden>
+          </div>
         </div>
-        <div class="notebox">Копия — это весь дневник одним файлом: тренировки, вес тела и питание. CSV выше годится для таблиц, но обратно не читается и питания в нём нет. Восстановление <b>добавляет недостающее и никогда не затирает</b> то, что уже записано, — старый файл безопасно открыть поверх свежих тренировок.</div>
+        <div class="card">
+          <h3>Таблица CSV</h3>
+          <p>Все подходы построчно, для Excel или Google Таблиц. Питания и веса тела в ней нет, и обратно в дневник она не загружается.</p>
+          <div class="row">
+            <button class="btn sm" id="btnExport" type="button">Выгрузить CSV</button>
+          </div>
+        </div>
       </div>
     </section>
   </div>

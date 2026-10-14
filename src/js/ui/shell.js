@@ -1,20 +1,40 @@
 /* ============================================================
-   Рендер: шапка
+   Рендер: шапка и плита недели
    ============================================================ */
+function blockName(week){ return week === 9 ? "Разгрузка" : (blockOf(week) === 1 ? "Full Body" : "Верх / Низ / Фулбоди"); }
 function renderHeader(){
   const week = programWeek(), blk = blockOf(week);
-  document.getElementById("cycleName").textContent = week === 9 ? "Разгрузка" : (blk === 1 ? "Full Body" : "Верх / Низ / Фулбоди");
-  document.getElementById("chipWeek").innerHTML = "Неделя <b>"+week+"</b> из 9";
+  document.getElementById("cycleName").textContent = "Неделя " + week + " из 9 · " + blockName(week);
+  document.getElementById("chipWeek").innerHTML = "Неделя <b>"+week+"</b>/9";
   const mon = mondayOf(today());
   const thisWeek = S.workouts.filter(w => parseISO(w.date) >= mon).length;
+  const st = streakWeeks();
+  const cs = document.getElementById("chipStreak");
+  cs.innerHTML = "Серия <b>"+st+"</b> нед.";
+  cs.className = "chip hide-s" + (st >= 2 ? " on" : "");
+
+  // плита недели на экране тренировки
+  document.getElementById("slabBlock").textContent =
+    week === 9 ? "Разгрузочная неделя" : "Блок " + blk + " · " + blockName(week);
+  document.getElementById("slabWeek").innerHTML = "Неделя " + pad(week) + "<small>/09</small>";
+  const bar = document.getElementById("cycleBar");
+  bar.innerHTML = "";
+  for(let i = 1; i <= 9; i++){
+    const c = document.createElement("span");
+    c.className = "cyc" + (isDeload(i) ? " dl" : "") + (i < week ? " past" : "") + (i === week ? " now" : "");
+    bar.appendChild(c);
+  }
+  document.getElementById("weekNote").textContent = WEEKNOTE[week] || "";
+  document.getElementById("wkCount").textContent = thisWeek + "/3";
   const dots = document.getElementById("dotsWeek");
   dots.innerHTML = "";
   for(let i=0;i<3;i++){ const s = document.createElement("span"); s.className = "dot"+(i<thisWeek?" f":""); dots.appendChild(s); }
-  document.getElementById("chipDots").firstChild.textContent = "Эта неделя " + thisWeek + "/3 ";
-  const st = streakWeeks();
-  const cs = document.getElementById("chipStreak");
-  cs.innerHTML = st > 0 ? "Серия <b>"+st+"</b> нед." : "Серия 0";
-  cs.className = "chip" + (st >= 2 ? " on" : "");
+  document.getElementById("slabStreak").textContent = st + " нед.";
+  const ws = sortedWorkouts();
+  const last = ws.length ? ws[ws.length-1] : null;
+  document.getElementById("slabLast").textContent = last
+    ? fmtShort(last.date) + " · " + (DAYS[last.day] ? DAYS[last.day].label : last.day)
+    : "—";
 }
 function weeksMap(){
   const m = new Map();
@@ -33,22 +53,73 @@ function streakWeeks(){
 /* ============================================================
    Таймер отдыха
    ============================================================ */
-let restLeft = 0, restInt = null;
+let restLeft = 0, restTotal = 1, restInt = null;
+const RING_LEN = 113.1;   // длина окружности r=18
 function startRestTimer(sec){
-  restLeft = sec;
-  document.getElementById("restTimer").classList.add("on");
+  restLeft = sec; restTotal = sec;
+  const el = document.getElementById("restTimer");
+  el.classList.add("on"); el.classList.remove("end");
   paintRest();
   clearInterval(restInt);
   restInt = setInterval(()=>{
     restLeft--; paintRest();
-    if(restLeft <= 0){ clearInterval(restInt); setTimeout(stopRest, 2500); }
+    if(restLeft <= 0){
+      clearInterval(restInt);
+      el.classList.add("end");
+      restSignal();
+      setTimeout(stopRest, 4000);
+    }
   }, 1000);
 }
 function paintRest(){
   const m = Math.max(0, Math.floor(restLeft/60)), s = Math.max(0, restLeft%60);
-  document.getElementById("restT").textContent = m + ":" + pad(s);
+  document.getElementById("restT").textContent = restLeft <= 0 ? "Подход!" : m + ":" + pad(s);
+  const f = Math.max(0, Math.min(1, restLeft / restTotal));
+  document.getElementById("restRing").setAttribute("stroke-dashoffset", String(RING_LEN * (1 - f)));
 }
-function stopRest(){ clearInterval(restInt); document.getElementById("restTimer").classList.remove("on"); }
+function stopRest(){ clearInterval(restInt); document.getElementById("restTimer").classList.remove("on","end"); }
+// Сигнал конца отдыха. Звук разрешён, потому что таймер запустило касание;
+// вибрацию и звук браузер вправе запретить — тогда остаётся надпись.
+let audioCtx = null;
+function restSignal(){
+  try{ if(navigator.vibrate) navigator.vibrate([180, 90, 180]); }catch(e){}
+  try{
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    [0, 0.22].forEach(t => {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.frequency.value = 880; o.connect(g); g.connect(audioCtx.destination);
+      const at = audioCtx.currentTime + t;
+      g.gain.setValueAtTime(0.0001, at);
+      g.gain.exponentialRampToValueAtTime(0.25, at + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, at + 0.18);
+      o.start(at); o.stop(at + 0.2);
+    });
+  }catch(e){}
+}
+
+/* ============================================================
+   Подтверждение. confirm() в артефакте не показывается и сразу
+   возвращает false, поэтому спрашиваем своим окном на странице.
+   ============================================================ */
+let confirmResolve = null;
+function askConfirm(title, text, yes){
+  const box = document.getElementById("confirmBox");
+  document.getElementById("confirmTitle").textContent = title;
+  document.getElementById("confirmText").textContent = text || "";
+  document.getElementById("confirmYes").textContent = yes || "Да";
+  box.hidden = false;
+  document.getElementById("confirmNo").focus();
+  return new Promise(res => { confirmResolve = res; });
+}
+function closeConfirm(v){
+  document.getElementById("confirmBox").hidden = true;
+  const r = confirmResolve; confirmResolve = null;
+  if(r) r(v);
+}
+document.getElementById("confirmYes").onclick = ()=>closeConfirm(true);
+document.getElementById("confirmNo").onclick = ()=>closeConfirm(false);
+document.getElementById("confirmBox").addEventListener("click", e => { if(e.target.id === "confirmBox") closeConfirm(false); });
+document.addEventListener("keydown", e => { if(e.key === "Escape" && confirmResolve) closeConfirm(false); });
 
 /* ============================================================
    Вкладки, тосты, общий рендер
@@ -74,6 +145,12 @@ function toast(msg){
   const el = document.getElementById("toast");
   el.textContent = msg; el.classList.add("on");
   clearTimeout(toastT); toastT = setTimeout(()=>el.classList.remove("on"), 3200);
+}
+
+function setSaveState(text, local){
+  const el = document.getElementById("saveState");
+  el.textContent = text;
+  el.classList.toggle("local", !!local);
 }
 
 function renderAll(){

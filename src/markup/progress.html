@@ -6,15 +6,20 @@
     </section>
 
     <section>
+      <h2 class="sec">Основные движения <span class="aside">расчётный 1ПМ · изменение за 4 недели</span></h2>
+      <div class="lifts" id="lifts"></div>
+    </section>
+
+    <section>
       <h2 class="sec">Прогресс по упражнению</h2>
       <div class="chartbox">
         <div class="row" style="margin-bottom:10px">
-          <select class="exsel" id="exSel"></select>
+          <select class="exsel" id="exSel" aria-label="Упражнение"></select>
           <span class="tiny" id="exSelNote"></span>
         </div>
         <div class="legend">
-          <span><i style="background:var(--accent)"></i>Рабочий вес, кг</span>
-          <span><i style="background:var(--series-2)"></i>Расчётный 1ПМ, кг</span>
+          <span><i class="sw-acc"></i>Рабочий вес, кг</span>
+          <span><i class="sw-s2"></i>Расчётный 1ПМ, кг</span>
         </div>
         <div id="exChart"></div>
         <div id="exRecent"></div>
@@ -31,7 +36,8 @@
       <div class="grid2">
         <div class="chartbox">
           <h3>Тоннаж по неделям</h3>
-          <div class="cs">Сумма вес × повторы за неделю · <span style="color:var(--accent)">■</span> 3 тренировки <span style="color:var(--warn)">■</span> меньше нормы</div>
+          <div class="cs">Сумма вес × повторы за неделю</div>
+          <div class="legend"><span><i class="sw-acc"></i>3 тренировки</span><span><i class="sw-warn"></i>меньше нормы</span></div>
           <div id="volChart"></div>
         </div>
         <div class="chartbox">
@@ -47,7 +53,7 @@
       <div class="chartbox">
         <h3>Календарь тренировок</h3>
         <div class="cs" id="hmNote"></div>
-        <div class="row" style="align-items:flex-start;gap:0">
+        <div class="hmwrap">
           <div class="hmlabels"><span>пн</span><span></span><span>ср</span><span></span><span>пт</span><span></span><span>вс</span></div>
           <div class="hm" id="hmGrid"></div>
         </div>
@@ -61,12 +67,13 @@
         <div class="cs">Программа: взвешиваться 3–4 раза в неделю утром натощак, сравнивать средние за неделю</div>
         <div id="bwChart"></div>
         <div class="bodyform">
-          <input id="bwDate" type="date" style="width:140px">
-          <input id="bwKg" type="number" step="0.1" placeholder="кг" inputmode="decimal">
-          <input id="bwWaist" type="number" step="0.5" placeholder="талия" inputmode="decimal">
-          <input id="bwArm" type="number" step="0.5" placeholder="рука" inputmode="decimal">
-          <button class="btn sm" id="bwAdd">Записать</button>
+          <input class="field" id="bwDate" type="date" aria-label="Дата замера">
+          <input class="field num" id="bwKg" type="number" step="0.1" placeholder="кг" inputmode="decimal" aria-label="Вес, кг">
+          <input class="field num" id="bwWaist" type="number" step="0.5" placeholder="талия" inputmode="decimal" aria-label="Талия, см">
+          <input class="field num" id="bwArm" type="number" step="0.5" placeholder="рука" inputmode="decimal" aria-label="Рука, см">
+          <button class="btn sm pri" id="bwAdd" type="button">Записать</button>
         </div>
+        <div class="bodylist" id="bwList"></div>
         <div class="advice" id="bwAdvice"></div>
       </div>
     </section>
